@@ -1,107 +1,71 @@
-const gigService = require('./set.service.js');
+const setService = require('./set.service.js');
 const logger = require('../../services/logger.service')
 const utilService = require('../../services/util.service')
 
 // GET LIST
-async function getGigs(req, res) {
-
+async function getSets(req, res) {
   try {
-    var queryParams = req.query;
-    const gigs = await gigService.query(queryParams)
-    res.send(gigs);
+    let queryParams = req.query
+    const sets = await setService.query(queryParams)
+    res.send(sets);
   } catch (err) {
-    logger.error('Failed to get gigs', err)
-    res.status(500).send({ err: 'Failed to get gigs' })
+    logger.error('Failed to get sets', err)
+    res.status(500).send({ err: 'Failed to get sets' })
   }
 }
 
 // GET BY ID 
-async function getGigById(req, res) {
-
+async function getSetById(req, res) {
   try {
-    const gigId = req.params.id;
-    const gig = await gigService.getById(gigId)
-    res.json(gig)
+    const setId = req.params.id;
+    const set = await setService.getById(setId)
+    res.json(set)
   } catch (err) {
-    logger.error('Failed to get gig', err)
-    res.status(500).send({ err: 'Failed to get gig' })
+    logger.error('Failed to get set', err)
+    res.status(500).send({ err: 'Failed to get set' })
   }
 }
 
-// POST (add gig)
-async function addGig(req, res) {
+// POST (add set)
+async function addSet(req, res) {
   try {
-    const gig = req.body;
-    //add review random
-    if (!gig.reviewsQty) gig.reviewsQty = utilService.getRandomInt(50, 1200)
-    const addedGig = await gigService.add(gig)
-    res.json(addedGig)
+    const set = req.body;
+    const addedSet = await setService.add(set)
+    res.json(addedSet)
   } catch (err) {
-    logger.error('Failed to add gig', err)
-    res.status(500).send({ err: 'Failed to add gig' })
+    logger.error('Failed to add set', err)
+    res.status(500).send({ err: 'Failed to add set' })
   }
 }
 
-// POST (add review)
-async function addReview(req, res) {
-
+// PUT (Update set)
+async function updateSet(req, res) {
   try {
-    const gig = req.body;
-    const review = req.body;
-    const addedReview = await gigService.addUserReview(gig, review)
-    res.json(addedReview)
+    const set = req.body;
+    const updatedSet = await setService.update(set)
+    res.json(updatedSet)
   } catch (err) {
-    logger.error('Failed to add review', err)
-    res.status(500).send({ err: 'Failed to add review' })
+    logger.error('Failed to update set', err)
+    res.status(500).send({ err: 'Failed to update set' })
   }
 }
 
-// PUT (Update gig)
-async function updateGig(req, res) {
-
+// DELETE (Remove set)
+async function removeSet(req, res) {
   try {
-    const gig = req.body;
-    if (!gig.reviewsQty) gig.reviewsQty = getRandomInt(50, 1200)
-    const updatedGig = await gigService.update(gig)
-    res.json(updatedGig)
-  } catch (err) {
-    logger.error('Failed to update gig', err)
-    res.status(500).send({ err: 'Failed to update gig' })
-  }
-}
-
-async function updateGigRate(req, res) {
-
-  try {
-    const gig = req.body;
-    const rating = req.body;
-    const updatedRate = await gigService.updateUserRating(gig, rating)
-    res.json(updatedRate)
-  } catch (err) {
-    logger.error('Failed to update gig', err)
-    res.status(500).send({ err: 'Failed to update gig' })
-  }
-}
-
-// DELETE (Remove gig)
-async function removeGig(req, res) {
-
-  try {
-    const gigId = req.params.id;
-    const removedId = await gigService.remove(gigId)
+    const setId = req.params.id;
+    const removedId = await setService.remove(setId)
     res.send(removedId)
   } catch (err) {
-    logger.error('Failed to remove gig', err)
-    res.status(500).send({ err: 'Failed to remove gig' })
+    logger.error('Failed to remove set', err)
+    res.status(500).send({ err: 'Failed to remove set' })
   }
 }
 
 module.exports = {
-  getGigs,
-  getGigById,
-  addGig,
-  addReview,
-  updateGig,
-  updateGigRate,
-  removeGig
+  getSets,
+  getSetById,
+  addSet,
+  updateSet,
+  removeSet
 }

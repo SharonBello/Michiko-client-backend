@@ -1,6 +1,5 @@
 const fs = require('fs')
 const asyncLocalStorage = require('./als.service')
-const utilService = require('./util.service')
 
 
 const logsDir = './logs'
@@ -11,28 +10,28 @@ if (!fs.existsSync(logsDir)) {
 //define the time format
 function getTime() {
     let now = new Date()
-    return now.toLocaleString('he')
+    return now.toLocaleString()
 }
 
+
 function isError(e) {
-    return e && e.stack && e.message
+    return e && e.stack && e.message;
 }
 
 function doLog(level, ...args) {
 
+    // console.log('LOGGER:', args);
     const strs = args.map(arg =>
         (typeof arg === 'string' || isError(arg)) ? arg : JSON.stringify(arg)
     )
 
     var line = strs.join(' | ')
     const store = asyncLocalStorage.getStore()
-    const userId = store?.loggedUser?._id
-    const str = userId ? `(userId: ${userId})` : ''
-    line = `${getTime()} - ${level} - ${line} ${str}\n`
-    
-    fs.appendFile('./logs/backend.log', line, (err) =>{
-        if (err) console.log('FATAL: cannot write to log file')
-    })
+    const sessionId = store?.sessionId
+    const sid = sessionId ? `(sid: ${sessionId})` : ''
+    line = `${getTime()} - ${level} - ${line} ${sid}\n`
+    console.log(line)
+    fs.appendFileSync('./logs/backend.log', line)
 }
 
 module.exports = {

@@ -38,9 +38,7 @@ async function getById(userId) {
     try {
         const collection = await dbService.getCollection('user')
         const user = await collection.findOne({ _id: ObjectId(userId) })
-        
         delete user.password
-
         // user.givenReviews = await reviewService.query({ byUserId: ObjectId(user._id) })
         // user.givenReviews = user.givenReviews.map(review => {
         //     delete review.byUser
@@ -53,13 +51,11 @@ async function getById(userId) {
         throw err
     }
 }
+
 async function getByUsername(userName) {
-    
     try {
-        
         const collection = await dbService.getCollection('user')
         const user = await collection.findOne({ userName })
-        
         return user
     } catch (err) {
         logger.error(`while finding user ${userName}`, err)
@@ -97,7 +93,6 @@ async function update(user) {
 }
 
 async function add(user) {
-   
     try {
         // peek only updatable fields!
         const userToAdd = {
@@ -105,43 +100,17 @@ async function add(user) {
             password: user.password,
             fullName: user.fullname,
             imgUrl: user.imgUrl,
-            level: 'Level 1 Seller',
             email: user.userName+'@gmail.com',
-            avgOrdersRate: 0,
-            isSeller: false,
-            reviews: [],
             google_account: '',
-            facebook_account: '',
-            twitter_account: ''
-            // score: 100
         }
-        
         const collection = await dbService.getCollection('user')
-
         await collection.insertOne(userToAdd)
-        
         return userToAdd
     } catch (err) {
         logger.error('cannot insert user', err)
         throw err
     }
 }
-
-async function updateUserIsSeller(userId){
-    console.log('userId from gig',userId )
-    const userToSave = await getById(userId)
-    console.log('userToSave in line 131', userToSave)
-
-    userToSave.isSeller = true
-    console.log('userToSave in  134', userToSave)
-
-    const collection = await dbService.getCollection('user')
-    await collection.updateOne({ _id: ObjectId(userId) }, { $set: userToSave })
-    console.log('userToSave in  138', userToSave)
-
-    return userToSave
-}
-
 
 function _buildCriteria(filterBy) {
     const criteria = {}

@@ -1,7 +1,6 @@
 [
   {
-      "_id": "L101",
-      "user_id": "U101",
+      "user_id": "62b09af3f14e63b68bcd9f1f",
       "title": "Science & Nature",
       "description": "Best VR game ever!",
       "createdAt": "1636410641000",
@@ -119,8 +118,7 @@
       ]
   },
   {
-      "_id": "L102",
-      "user_id": "U103",
+      "user_id": "62b09af3f14e63b68bcd9f20",
       "title": "Mythology",
       "description": "Best VR game ever!",
       "createdAt": "1636410641030",
@@ -234,8 +232,7 @@
       ]
   },
   {
-      "_id": "L103",
-      "user_id": "U102",
+      "user_id": "62b09af3f14e63b68bcd9f21",
       "title": "Trivia",
       "description": "Best VR game ever!",
       "createdAt": "1636410641020",
@@ -351,8 +348,7 @@
       ]
   },
   {
-      "_id": "L104",
-      "user_id": "U101",
+      "user_id": "62b09af3f14e63b68bcd9f22",
       "title": "Geography",
       "description": "Best VR game ever!",
       "createdAt": "1636410641040",
@@ -466,8 +462,7 @@
       ]
   },
   {
-      "_id": "L105",
-      "user_id": "U104",
+      "user_id": "62b09af3f14e63b68bcd9f23",
       "title": "History",
       "description": "Best VR game ever!",
       "createdAt": "1636410641050",
@@ -579,8 +574,7 @@
       ]
   },
   {
-      "_id": "L106",
-      "user_id": "U104",
+      "user_id": "62b09af3f14e63b68bcd9f24",
       "title": "Video Games",
       "description": "Best VR game ever!",
       "createdAt": "1636410641070",
@@ -696,8 +690,7 @@
       ]
   },
   {
-      "_id": "L107",
-      "user_id": "U104",
+      "user_id": "62b09af3f14e63b68bcd9f25",
       "title": "Board Games",
       "description": "Best VR game ever!",
       "createdAt": "1636410641080",

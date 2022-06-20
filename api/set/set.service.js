@@ -1,29 +1,24 @@
 const dbService = require('../../services/db.service')
 const logger = require('../../services/logger.service')
-const reviewService = require('../review/review.service')
 const ObjectId = require('mongodb').ObjectId
 const userService = require('../user/user.service');
 
 async function query(filterBy) {
-
     try {
-
         const criteria = _buildCriteria(filterBy)
-        const collection = await dbService.getCollection('gig')
+        const collection = await dbService.getCollection('set')
         let sortBy = filterBy.sortBy
         let sortType = 1
-        let gigs = await collection.find(criteria).sort({ [sortBy]: sortType }).toArray()
-        return gigs
+        let sets = await collection.find(criteria).sort({ [sortBy]: sortType }).toArray()
+        return sets
     } catch (err) {
-        logger.error('cannot find gigs', err)
+        logger.error('cannot find sets', err)
         throw err
     }
 }
 
 function _buildCriteria(filterBy) {
-
     let criteria = {}
-
     if (filterBy.txt) {
         const txtCriteria = { $regex: filterBy.txt, $options: 'i' } //'i' for Capitals       
         criteria.$or = [
@@ -35,103 +30,62 @@ function _buildCriteria(filterBy) {
             }
         ]
     }
-    if (filterBy.priceMin && filterBy.priceMax < Infinity) {
-        criteria.price = ({ $gte: +filterBy.priceMin, $lte: +filterBy.priceMax })
-    }
-
-    if (filterBy.category) {
-        txtCriteria = { $regex: filterBy.category, $options: 'i' }
-        criteria.category = txtCriteria
-    }
-    if (filterBy.deliveryDate >= 1) {
-        criteria.daysToMake = { $lte: +filterBy.deliveryDate }
-    }
-
     return criteria
 }
 
 async function getById(gigId) {
-
     try {
-
-        const collection = await dbService.getCollection('gig')
-        const gig = collection.findOne({ _id: ObjectId(gigId) })
-
-        return gig
+        const collection = await dbService.getCollection('set')
+        const set = collection.findOne({ _id: ObjectId(setId) })
+        return set
     } catch (err) {
-        logger.error(`while finding gig ${gigId}`, err)
+        logger.error(`while finding set ${setId}`, err)
         throw err
     }
 }
 
-async function remove(gigId) {
+async function remove(setId) {
     try {
-        const collection = await dbService.getCollection('gig')
-        await collection.deleteOne({ _id: ObjectId(gigId) })
-        return gigId
+        const collection = await dbService.getCollection('set')
+        await collection.deleteOne({ _id: ObjectId(setId) })
+        return setId
     } catch (err) {
-        logger.error(`cannot remove gig ${gigId}`, err)
+        logger.error(`cannot remove set ${setId}`, err)
         throw err
     }
 }
 
-async function add(gig) {
-
+async function add(set) {
     try {
-        const collection = await dbService.getCollection('gig')
-        await collection.insertOne(gig)
-        const user = await userService.updateUserIsSeller(gig.owner._id)
-        return gig
+        const collection = await dbService.getCollection('set')
+        await collection.insertOne(set)
+        const user = await userService.updateUserIsSeller(set.user._id)
+        return set
     } catch (err) {
-        logger.error('cannot insert gig', err)
+        logger.error('cannot insert set', err)
         throw err
     }
 }
 
-async function addGigReview(gig, review) {
+
+async function update(set) {
     try {
-        let id = ObjectId(gig._id)
-        const collection = await dbService.getCollection('gig')
-        const updatedGig = await collection.updateOne({ _id: ObjectId(id) }, { $set: { ...gig, review: review } })
-        return updatedGig
+        let id = ObjectId(set._id)
+        delete set._id
+        const collection = await dbService.getCollection('set')
+        await collection.updateOne({ _id: ObjectId(id) }, { $set: { ...set } })
+        return set
     } catch (err) {
-        logger.error('cannot add review', err)
+        logger.error(`cannot update set ${setId}`, err)
         throw err
     }
 }
 
-async function update(gig) {
-    try {
-        let id = ObjectId(gig._id)
-        delete gig._id
-        const collection = await dbService.getCollection('gig')
-        await collection.updateOne({ _id: ObjectId(id) }, { $set: { ...gig } })
-
-        return gig
-    } catch (err) {
-        logger.error(`cannot update gig ${gigId}`, err)
-        throw err
-    }
-}
-
-async function updateGigRating(gig, rating) {
-    try {
-        let id = ObjectId(gig._id)
-        const collection = await dbService.getCollection('gig')
-        const updatedGig = await collection.updateOne({ _id: ObjectId(id) }, { $set: { ...gig, rating: rating } })
-        return updatedGig
-    } catch (err) {
-        logger.error('cannot add review', err)
-        throw err
-    }
-}
 
 module.exports = {
     remove,
     query,
     getById,
     add,
-    update,
-    updateGigRating,
-    addGigReview
+    update
 }

@@ -1,15 +1,23 @@
 const express = require('express')
 const cors = require('cors')
 const path = require('path')
+const expressSession = require('express-session')
 const cookieParser = require('cookie-parser')
 
 const app = express()
 const http = require('http').createServer(app)
 
 // Express App Config
-
+const session = expressSession({
+    secret: 'coding is amazing',
+    reSave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }
+})
 app.use(cookieParser())
 app.use(express.json())
+app.use(session)
+
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.resolve(__dirname, 'public')))
 } else {
@@ -22,10 +30,10 @@ if (process.env.NODE_ENV === 'production') {
 
 const authRoutes = require('./api/auth/auth.routes')
 const userRoutes = require('./api/user/user.routes')
-const gigRoutes = require('./api/gig/gig.routes')
-const orderRoutes = require('./api/order/order.routes')
-// const reviewRoutes = require('./api/review/review.routes')
+const setRoutes = require('./api/set/set.routes')
+// const {connectSockets} = require('./services/socket.service')
 const {setupSocketAPI} = require('./services/socket.service')
+
 
 // routes
 const setupAsyncLocalStorage = require('./middlewares/setupAls.middleware')
@@ -33,10 +41,9 @@ app.all('*', setupAsyncLocalStorage)
 
 app.use('/api/auth', authRoutes)
 app.use('/api/user', userRoutes)
-app.use('/api/gig', gigRoutes)
-app.use('/api/order', orderRoutes)
-// app.use('/api/review', reviewRoutes)
+app.use('/api/set', setRoutes)
 setupSocketAPI(http)
+// connectSockets(http, session)
 
 // Make every server-side-route to match the index.html
 // so when requesting http://localhost:3030/index.html/car/123 it will still respond with

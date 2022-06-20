@@ -7,7 +7,7 @@ module.exports = {
 }
 
 // Database Name
-const dbName = 'wiserr_db'
+const dbName = 'michiko_db';
 
 var dbConn = null
 
@@ -34,7 +34,3 @@ async function connect() {
         throw err
     }
 }
-
-
-
-
