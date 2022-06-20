@@ -1,22 +1,22 @@
 const express = require('express')
 const cors = require('cors')
 const path = require('path')
-const expressSession = require('express-session')
+// const expressSession = require('express-session')
 const cookieParser = require('cookie-parser')
 
 const app = express()
 const http = require('http').createServer(app)
 
 // Express App Config
-const session = expressSession({
-    secret: 'coding is amazing',
-    reSave: false,
-    saveUninitialized: true,
-    cookie: { secure: false }
-})
+// const session = expressSession({
+//     secret: 'coding is amazing',
+//     reSave: false,
+//     saveUninitialized: true,
+//     cookie: { secure: false }
+// })
 app.use(cookieParser())
 app.use(express.json())
-app.use(session)
+// app.use(session)
 
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.resolve(__dirname, 'public')))

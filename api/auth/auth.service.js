@@ -20,7 +20,6 @@ async function login(userName, password) {
 }
 
 async function signup({ userName, password, fullname, imgUrl }) {
-
     const saltRounds = 10
     logger.debug(`auth.service - signup with username: ${userName}, fullname: ${fullname}`)
     if (!userName || !password || !fullname) return Promise.reject('Missing required signup information')
@@ -40,8 +39,8 @@ function getLoginToken(user) {
 function validateToken(loginToken) {
     try {
         const json = cryptr.decrypt(loginToken)
-        const loggedinUser = JSON.parse(json)
-        return loggedinUser
+        const loggedUser = JSON.parse(json)
+        return loggedUser
 
     } catch (err) {
         console.log('Invalid login token')

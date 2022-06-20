@@ -59,7 +59,6 @@ async function add(set) {
     try {
         const collection = await dbService.getCollection('set')
         await collection.insertOne(set)
-        const user = await userService.updateUserIsSeller(set.user._id)
         return set
     } catch (err) {
         logger.error('cannot insert set', err)
